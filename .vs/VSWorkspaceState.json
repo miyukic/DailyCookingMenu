@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\bin",
+    "\\bin\\Release\\net5.0",
+    "\\obj",
+    "\\obj\\Release",
+    "\\obj\\Release\\net5.0"
+  ],
+  "SelectedNode": "\\obj\\DailyCookingMenu.csproj.nuget.g.targets",
+  "PreviewInSolutionExplorer": false
+}
