@@ -90,8 +90,8 @@ public class Cuisine : ICuisine
 
     public override int GetHashCode()
     {
-        return this.Name.GetHashCode() + this.TimeZone.GetHashCode()
-        + this.RecipeURL.GetHashCode() + this.CategorySet.GetHashCode();
+        return this.Name.GetHashCode() ^ this.TimeZone.GetHashCode()
+        ^ this.RecipeURL.GetHashCode() ^ this.CategorySet.GetHashCode();
     }
 
     public override bool Equals(Object other)
@@ -173,7 +173,6 @@ class Program
 
     public static void Main(string[] args)
     {
-        new MealConstitutionComponent().IsAbleToSetSearchMode("");
         GetAPI().AddDish(new Dish(
             name: "カレー",
             timeZone: MakeTimeZone(new TimeZoneTAG[2] {TimeZoneTAG.All, TimeZoneTAG.Breakfast})
@@ -395,15 +394,43 @@ public class CookingRobot
     }
 
     // 献立の構成（MealConstitution）から献立を作成する
-    public List<Dish> PlanMeal(MealConstitution constitution)
+    public HashSet<Dish> PlanMeal(MealConstitution constitution)
     {
-        var resultMeal = new List<Dish>();
-        var dishList = Data.DishList;
-        foreach (MealConstitutionComponent item in constitution.Constitution)
+        var resultMeal = new HashSet<Dish>();
+        var allDishList = Data.DishList;
+        var tempList = new List<List<Dish>>();
+        foreach (MealConstitutionComponent component in constitution.Constitution)
         {
-
+            var t = SearchDishFromMealConstitutionComponent(component)
+            tempList.Add(t);
+)           // var list = SearchDishFrokmMealConstitutionComponent(component);
+            // Dish dish = null;
+            // do {
+            //     var pointer = 0;
+            //     dish = list[GenerateRandomNumberList(list.Count(), list.Count())[pointer]];
+            //     if (pointer++ > (list.Count() - 1)) {
+            //         // Todo: 料理の献立が他の条件のものと被って、他に選択肢がない場合どうするか？
+            //         // 被った場合は被ったものをこっちに渡して、
+            //         //resultMeal.Contains(dish);
+            //         break;
+            //     }
+            // } while (!resultMeal.Add(dish));
         }
         return resultMeal;
+    }
+
+    //
+    public List<Dish> SearchDishFromMealConstitutionComponent(MealConstitutionComponent component)
+    {
+        var resultList = new List<Dish>();
+        if (component == null) return resultList;
+        foreach (var item in Data.DishList)
+        {
+            var ans = component.EqualTo(item);
+            if (!ans) continue;
+            resultList.Add(item);
+        }
+        return resultList;
     }
 
     public List<int> GenerateRandomNumberList(int volume, int quantity)
